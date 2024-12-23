@@ -1,0 +1,93 @@
+/* General body styles */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: white;
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+
+
+.hero-section {
+    background: url('../Images/t.jpg') no-repeat center center;
+    background-size: cover;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin: 0;
+}
+
+/* Content Section */
+.content-section {
+    padding: 60px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+    line-height: 1.8;
+}
+
+/* Heading styles */
+.content-section h2 {
+    color: #095c1c;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+}
+
+.content-section p {
+    font-size: 1.1rem;
+    color: black;
+}
+
+/* Core Values Section */
+.values {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 60px;
+    gap: 20px;
+}
+
+.value-item {
+    background-color: #C1E899;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    color: #9A6735;
+    flex: 1;
+    transition: transform 0.3s ease;
+}
+
+.value-item:hover {
+    transform: translateY(-10px);
+}
+
+.value-item h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .values {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .content-section h2 {
+        font-size: 2rem;
+    }
+}

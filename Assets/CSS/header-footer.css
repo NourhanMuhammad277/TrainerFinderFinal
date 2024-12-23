@@ -1,0 +1,78 @@
+
+
+header {
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.logo {
+    text-align: center;
+}
+
+.logo-image {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+nav {
+    background-color: #28a745;
+}
+nav a {
+    margin: 0 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Footer Styles */
+footer {
+    background-color:#28a745;
+    ;
+    color: #ffffff;
+    padding: 20px 0;
+}
+
+.section-title {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.contact-info {
+    list-style-type: none;
+    padding: 0;
+}
+
+#ss {
+    color: black;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#sport {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: black;
+    font-weight: bold;
+}
+
+.contact-info li {
+    margin: 5px 0;
+}
+
+.social-icons {
+    margin: 15px 0;
+}
+
+.social-icons a {
+    margin: 0 10px;
+    color: white;
+}
+
+.contact-form {
+    margin-top: 20px;
+}
+
+.contact-form .form-group {
+    margin-bottom: 15px;
+}
