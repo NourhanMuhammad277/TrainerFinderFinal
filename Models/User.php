@@ -1,12 +1,13 @@
 <?php
 // Assuming you are including the db.php file to access the connection globally
-include_once '../db.php';
-
+use Database;
 class User {
-
+   
     // Method to get a user by email
-    public static function getUserByEmail($conn, $email) {
+    public static function getUserByEmail($email) {
         // Ensure the connection is valid
+          $db = Database::getInstance();
+         $conn = $db->getConnection();
         if (!$conn) {
             die("Database connection failed.");
         }
@@ -37,7 +38,9 @@ class User {
     }
 
     // Method to create a user
-    public static function createUser($conn, $email, $password, $username) {
+    public static function createUser( $email, $password, $username) {
+          $db = Database::getInstance();
+         $conn = $db->getConnection();
         // Ensure the connection is valid
         if (!$conn) {
             die("Database connection failed.");
@@ -59,7 +62,9 @@ class User {
     }
 
     // Method to get all users
-    public static function getAllUsers($conn) {
+    public static function getAllUsers() {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
         // Ensure the connection is valid
         if (!$conn) {
             die("Database connection failed.");
@@ -84,8 +89,10 @@ class User {
     }
 
     // Method to update a user by ID
-    public static function updateUser($conn, $id, $email, $password, $username) {
+    public static function updateUser($id, $email, $password, $username) {
         // Ensure the connection is valid
+          $db = Database::getInstance();
+     $conn = $db->getConnection();
         if (!$conn) {
             die("Database connection failed.");
         }
@@ -106,7 +113,10 @@ class User {
     }
 
     // Method to delete a user by ID
-    public static function deleteUser($conn, $id) {
+    public static function deleteUser( $id) {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
         // Ensure the connection is valid
         if (!$conn) {
             die("Database connection failed.");

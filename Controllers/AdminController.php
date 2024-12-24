@@ -1,145 +1,188 @@
 <?php
-include_once '../Models/AdminClass.php'; // Include the model
-
-class AdminController {
-
+use \AdminModel;
+class AdminController
+{
     // Show the admin dashboard
-    public static function showDashboard() {
-        include '../Views/dashboardView.php'; // Render the dashboard view
+    public static function showDashboard()
+    {
+        include "../Views/dashboardView.php"; // Render the dashboard view
     }
 
     // Manage applications
-    public static function manageApplications() {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $applications = AdminClass::getApplications($conn);
-        include '../Views/applicationsView.php'; // Render the applications view
+    public static function manageApplications()
+    {
+       
+        $applications = AdminModel::getApplications();
+        include "../Views/applicationsView.php"; // Render the applications view
     }
 
     // View all users
-    public static function viewUsers() {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $users = AdminClass::getUsers($conn);
-        include '../Views/usersListView.php'; // Render the users list view
+    public static function viewUsers()
+    {
+       
+        $users = AdminModel::getUsers();
+        include "../Views/usersListView.php"; // Render the users list view
     }
 
     // View all trainers
-    public static function viewTrainers() {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $trainers = AdminClass::getTrainers($conn);
-        include '../Views/trainersListView.php'; // Render the trainers list view
+    public static function viewTrainers()
+    {
+       
+        $trainers = AdminModel::getTrainers();
+        include "../Views/trainersListView.php"; // Render the trainers list view
     }
 
     // Accept a trainer application
-    public static function acceptApplication($applicationId) {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $result = AdminClass::acceptApplication($conn, $applicationId);
-        
+    public static function acceptApplication($applicationId)
+    {
+       
+        $result = AdminModel::acceptApplication( $applicationId);
+
         if ($result) {
-            header('Location: ../Controllers/adminController.php?page=applications');
+            header(
+                "Location: ../Controllers/adminController.php?page=applications"
+            );
         } else {
             echo "Error accepting application.";
         }
     }
 
     // Reject a trainer application
-    public static function rejectApplication($applicationId) {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $result = AdminClass::rejectApplication($conn, $applicationId);
-        
+    public static function rejectApplication($applicationId)
+    {
+       
+        $result = AdminModel::rejectApplication( $applicationId);
+
         if ($result) {
-            header('Location: ../Controllers/adminController.php?page=applications');
+            header(
+                "Location: ../Controllers/adminController.php?page=applications"
+            );
         } else {
             echo "Error rejecting application.";
         }
     }
 
     // Edit a user
-    public static function editUser($id) {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $user = AdminClass::getUserById($conn, $id); // Assuming there's a method to fetch user by ID
-        include '../Views/editUserView.php'; // Render the edit user view
+    public static function editUser($id)
+    {
+       
+        $user = AdminModel::getUserById($id); // Assuming there's a method to fetch user by ID
+        include "../Views/editUserView.php"; // Render the edit user view
     }
 
     // Update a user
-    public static function updateUser() {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $id = $_POST['id'];
-        $email = $_POST['email'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+    public static function updateUser()
+    {
+       
+        $id = $_POST["id"];
+        $email = $_POST["email"];
+        $username = $_POST["username"];
+        $password = $_POST["password"];
 
-        $result = AdminClass::updateUser($conn, $id, $email, $username, $password);
-        
+        $result = AdminModel::updateUser(
+            
+            $id,
+            $email,
+            $username,
+            $password
+        );
+
         if ($result) {
-            header('Location: ../Controllers/adminController.php?page=users');
+            header("Location: ../Controllers/adminController.php?page=users");
         } else {
             echo "Error updating user.";
         }
     }
 
     // Delete a user
-    public static function deleteUser($id) {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $result = AdminClass::deleteUser($conn, $id);
-        
+    public static function deleteUser($id)
+    {
+       
+        $result = AdminModel::deleteUser( $id);
+
         if ($result) {
-            header('Location: ../Controllers/adminController.php?page=users');
+            header("Location: ../Controllers/adminController.php?page=users");
         } else {
             echo "Error deleting user.";
         }
     }
 
     // Edit a trainer
-    public static function editTrainer($id) {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $trainer = AdminClass::getTrainerById($conn, $id); // Fetch trainer by ID
-        include '../Views/editTrainerView.php'; // Render the edit trainer view
+    public static function editTrainer($id)
+    {
+       
+        $trainer = AdminModel::getTrainerById( $id); // Fetch trainer by ID
+        include "../Views/editTrainerView.php"; // Render the edit trainer view
     }
 
     // Update a trainer
-    public static function updateTrainer() {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $id = $_POST['id'];
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $location = $_POST['location'];
-        $sport = $_POST['sport'];
-        $timings = $_POST['timings'];
+    public static function updateTrainer()
+    {
+       
+        $id = $_POST["id"];
+        $username = $_POST["username"];
+        $email = $_POST["email"];
+        $location = $_POST["location"];
+        $sport = $_POST["sport"];
+        $timings = $_POST["timings"];
 
-        $result = AdminClass::updateTrainer($conn, $id, $username, $email, $location, $sport, $timings);
-        
+        $result = AdminModel::updateTrainer(
+            
+            $id,
+            $username,
+            $email,
+            $location,
+            $sport,
+            $timings
+        );
+
         if ($result) {
-            header('Location: ../Controllers/adminController.php?page=trainers');
+            header(
+                "Location: ../Controllers/adminController.php?page=trainers"
+            );
         } else {
             echo "Error updating trainer.";
         }
     }
 
     // Delete a trainer
-    public static function deleteTrainer($id) {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $result = AdminClass::deleteTrainer($conn, $id);
-        
+    public static function deleteTrainer($id)
+    {
+       
+        $result = AdminModel::deleteTrainer($id);
+
         if ($result) {
-            header('Location: ../Controllers/adminController.php?page=trainers');
+            header(
+                "Location: ../Controllers/adminController.php?page=trainers"
+            );
         } else {
             echo "Error deleting trainer.";
         }
     }
 
     // Add a new trainer
-    public static function addTrainer() {
-        $conn = mysqli_connect('localhost', 'username', 'password', 'database'); // Your DB connection
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $location = $_POST['location'];
-        $sport = $_POST['sport'];
-        $timings = $_POST['timings'];
+    public static function addTrainer()
+    {
+       
+        $username = $_POST["username"];
+        $email = $_POST["email"];
+        $location = $_POST["location"];
+        $sport = $_POST["sport"];
+        $timings = $_POST["timings"];
 
-        $result = AdminClass::addTrainer($conn, $username, $email, $location, $sport, $timings);
-        
+        $result = AdminModel::addTrainer(
+            
+            $username,
+            $email,
+            $location,
+            $sport,
+            $timings
+        );
+
         if ($result) {
-            header('Location: ../Controllers/adminController.php?page=trainers');
+            header(
+                "Location: ../Controllers/adminController.php?page=trainers"
+            );
         } else {
             echo "Error adding trainer.";
         }

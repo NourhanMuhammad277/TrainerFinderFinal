@@ -5,6 +5,9 @@ include_once '../Models/Admin.php';
 
 class LoginSignupController {
     public static function handleRequest() {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
         session_start();
 
         // Enable error reporting for debugging
@@ -12,7 +15,7 @@ class LoginSignupController {
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
 
-        global $conn; 
+        // global $conn; 
 
         $signup_error = '';
         $login_error = '';
@@ -40,12 +43,12 @@ class LoginSignupController {
                     if ($password !== $confirm_password) {
                         $signup_error = "Passwords do not match.";
                     } else {
-                        $existingUser = User::getUserByEmail($conn, $email);
+                        $existingUser = User::getUserByEmail($email);
                         if ($existingUser) {
                             $signup_error = "Email already exists.";
                         } else {
                             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-                            $userCreated = User::createUser($conn, $email, $hashed_password, $username);
+                            $userCreated = User::createUser( $email, $hashed_password, $username);
                             if ($userCreated) {
                                 // Set session variables and redirect to the profile page
                                 $_SESSION['user_id'] = $conn->insert_id;
@@ -69,7 +72,7 @@ class LoginSignupController {
                     }
 
                     // Now, check if the email belongs to a regular user
-                    $user = User::getUserByEmail($conn, $email);
+                    $user = User::getUserByEmail( $email);
                     if ($user) {
                         // Verify the password
                         if (password_verify($password, $user['password'])) {
