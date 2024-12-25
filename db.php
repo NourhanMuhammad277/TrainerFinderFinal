@@ -1,14 +1,29 @@
 <?php
-$servername = "localhost"; // Host
-$username = "root"; // Your MySQL username (default is 'root')
-$password = ""; // Your MySQL password (default is empty)
-$dbname = "TrainerFinder"; // Your database name
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Usage
+// $db = Database::getInstance();
+// $connection = $db->getConnection();
+class Database
+{
+    private static $instance;
+    private $connection;
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    private function __construct()
+    {
+        $this->connection = mysqli_connect("localhost", "root", "", "TrainerFinder");
+    }
+
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new self;
+        }
+
+        return self::$instance;
+    }
+
+    public function getConnection()
+    {
+        return $this->connection;
+    }
 }
-?>
