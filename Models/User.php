@@ -1,18 +1,17 @@
 <?php
-// Assuming you are including the db.php file to access the connection globally
 use Database;
 class User {
-   
-    // Method to get a user by email
+
+ //USING CRUD OPERATIONS 
+
+ 
+  //read
     public static function getUserByEmail($email) {
-        // Ensure the connection is valid
           $db = Database::getInstance();
          $conn = $db->getConnection();
         if (!$conn) {
             die("Database connection failed.");
         }
-
-        // Use prepared statements to avoid SQL injection
         $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
         if (!$stmt) {
             die("Statement preparation failed: " . $conn->error);
@@ -37,11 +36,11 @@ class User {
         return null;
     }
 
-    // Method to create a user
+   //create
     public static function createUser( $email, $password, $username) {
           $db = Database::getInstance();
          $conn = $db->getConnection();
-        // Ensure the connection is valid
+   
         if (!$conn) {
             die("Database connection failed.");
         }
@@ -54,14 +53,11 @@ class User {
 
         $stmt->bind_param("sss", $email, $password, $username);
         $success = $stmt->execute();
-
-        // Close the statement and return whether the operation was successful
         $stmt->close();
 
         return $success;
     }
-
-    // Method to get all users
+//read
     public static function getAllUsers() {
         $db = Database::getInstance();
         $conn = $db->getConnection();
@@ -87,17 +83,13 @@ class User {
 
         return $users;
     }
-
-    // Method to update a user by ID
+//update
     public static function updateUser($id, $email, $password, $username) {
-        // Ensure the connection is valid
           $db = Database::getInstance();
      $conn = $db->getConnection();
         if (!$conn) {
             die("Database connection failed.");
         }
-
-        // Update the user using a prepared statement
         $stmt = $conn->prepare("UPDATE users SET email = ?, password = ?, username = ? WHERE id = ?");
         if (!$stmt) {
             die("Statement preparation failed: " . $conn->error);
@@ -105,24 +97,17 @@ class User {
 
         $stmt->bind_param("sssi", $email, $password, $username, $id);
         $success = $stmt->execute();
-
-        // Close the statement and return whether the operation was successful
         $stmt->close();
 
         return $success;
     }
-
-    // Method to delete a user by ID
+     //delete
     public static function deleteUser( $id) {
         $db = Database::getInstance();
         $conn = $db->getConnection();
-
-        // Ensure the connection is valid
         if (!$conn) {
             die("Database connection failed.");
         }
-
-        // Delete the user using a prepared statement
         $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
         if (!$stmt) {
             die("Statement preparation failed: " . $conn->error);
@@ -130,8 +115,6 @@ class User {
 
         $stmt->bind_param("i", $id);
         $success = $stmt->execute();
-
-        // Close the statement and return whether the operation was successful
         $stmt->close();
 
         return $success;

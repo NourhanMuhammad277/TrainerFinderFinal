@@ -4,6 +4,7 @@ use Database;
 
 class AdminClass
 {
+    //USING CRUD FUNCTIONS 
 
     // Get all applications
     public static function getApplications()

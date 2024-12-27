@@ -6,8 +6,6 @@ include_once '../db.php';
 class AdminController {
     public static function handleRequest() {
         $page = $_GET['page'] ?? ''; // Get the page parameter
-
-        // Route to the appropriate function in the AdminController
         switch ($page) {
             case 'dashboard':
                 self::showDashboard();
