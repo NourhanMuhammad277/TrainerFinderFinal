@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include_once '../Models/AdminModel.php'; // Include the model
 include_once '../db.php'; 
 
@@ -92,26 +92,22 @@ class AdminController {
 
     // View all trainers
     public static function viewTrainers() {
-        include '../Views/Trainerslist.php'; // Render the trainers list view
+        include '../Views/Trainerslist.php';
     }
    
-    function getAllTrainers($conn) {
+    public static function getAllTrainers($conn) {
         $trainers = [];
-        $sql = "SELECT id, username, location, sport, availability FROM accepted_trainers";
-        $stmt = $conn->prepare($sql);
+        $sql = "SELECT * FROM accepted_trainers";
+        $result = $conn->query($sql);
     
-        if ($stmt->execute()) {
-            $result = $stmt->get_result();
+        if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $trainers[] = $row;
             }
-        } else {
-            // Log or handle query execution errors if needed
-            error_log("Error executing query: " . $conn->error);
         }
-    
         return $trainers;
     }
+    
  
     
     // Add a new trainer
@@ -139,20 +135,24 @@ class AdminController {
     public static function updateTrainer() {
         $conn = Database::getInstance()->getConnection();
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-            $id = intval($_POST['id']);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_id'])) {
+            $update_id = intval($_POST['update_id']);
             $username = trim($_POST['username']);
             $email = trim($_POST['email']);
             $location = trim($_POST['location']);
             $sport = trim($_POST['sport']);
-            $timings = trim($_POST['timings']);
-
-            $result = AdminClass::updateTrainer($conn, $id, $username, $email, $location, $sport, $timings);
-
-            if ($result) {
-                header('Location: ../Controllers/adminController.php?page=viewTrainers');
+            $day_time = trim($_POST['day_time']);
+            $state = trim($_POST['state']);
+        
+            $update_query = "UPDATE accepted_trainers 
+                             SET username = ?, email = ?, location = ?, sport = ?, day_time = ?, state = ? 
+                             WHERE id = ?";
+            $stmt = $conn->prepare($update_query);
+            $stmt->bind_param('ssssssi', $username, $email, $location, $sport, $day_time, $state, $update_id);
+            if ($stmt->execute()) {
+                $_SESSION['message'] = "Trainer updated successfully.";
             } else {
-                echo "Error updating trainer.";
+                $_SESSION['message'] = "Error updating trainer.";
             }
         }
     }
@@ -162,16 +162,17 @@ class AdminController {
         $conn = Database::getInstance()->getConnection();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
-            $id = intval($_POST['delete_id']);
-            $result = AdminClass::deleteTrainer($conn, $id);
-
-            if ($result) {
-                header('Location: ../Controllers/adminController.php?page=viewTrainers');
+            $delete_id = intval($_POST['delete_id']);
+            $delete_query = "DELETE FROM accepted_trainers WHERE id = ?";
+            $stmt = $conn->prepare($delete_query);
+            $stmt->bind_param('i', $delete_id);
+            if ($stmt->execute()) {
+                $_SESSION['message'] = "Trainer deleted successfully.";
             } else {
-                echo "Error deleting trainer.";
+                $_SESSION['message'] = "Error deleting trainer.";
             }
-        }
-    }
+        }}
+        
 }
 
 // Handle the incoming request
