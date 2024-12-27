@@ -6,14 +6,14 @@
 class Database
 {
     private static $instance;
-    private $connection;
+    private mysqli $connection;
 
     private function __construct()
     {
         $this->connection = mysqli_connect("localhost", "root", "", "TrainerFinder");
     }
 
-    public static function getInstance()
+    public static function getInstance(): Database
     {
         if (!isset(self::$instance)) {
             self::$instance = new self;
@@ -22,7 +22,7 @@ class Database
         return self::$instance;
     }
 
-    public function getConnection()
+    public function getConnection(): mysqli
     {
         return $this->connection;
     }
