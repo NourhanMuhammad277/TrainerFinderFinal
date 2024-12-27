@@ -13,7 +13,7 @@ class AdminController {
             case 'users':
                 self::viewUsers();
                 break;
-            case 'manageApplications':
+            case 'applications':
                 self::manageApplications();
                 break;
             case 'trainers':
@@ -41,6 +41,39 @@ class AdminController {
     // View all users
     public static function viewUsers() {
         include '../Views/userslistView.php'; // Render the users list view
+    }
+    public static function getAllApplications($conn) {
+        $sql = "SELECT ta.id, u.username, u.email, ta.location, ta.sport, ta.day_time, ta.certificate, ta.state
+                FROM trainer_applications ta
+                JOIN users u ON ta.user_id = u.id
+                WHERE ta.state = 'pending'";
+        $result = $conn->query($sql);
+        return $result;
+    }
+    public static function acceptApplication($conn, $application_id, $user_id, $username, $email, $certificate, $location, $sport, $day_time) {
+        // Insert into accepted_trainers
+        $sql_insert = "INSERT INTO accepted_trainers (user_id, username, email, certificate, location, sport, day_time, state, approved_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, 'accepted', NOW())";
+        $stmt_insert = $conn->prepare($sql_insert);
+        $stmt_insert->bind_param("issssss", $user_id, $username, $email, $certificate, $location, $sport, $day_time);
+
+        if ($stmt_insert->execute()) {
+            // Update application state to accepted
+            $sql_update = "UPDATE trainer_applications SET state = 'accepted' WHERE id = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param("i", $application_id);
+            $stmt_update->execute();
+            return true;
+        }
+        return false;
+    }
+    public static function denyApplication($conn, $application_id) {
+        // Update application state to denied
+        $sql_update = "UPDATE trainer_applications SET state = 'denied' WHERE id = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("i", $application_id);
+
+        return $stmt_update->execute();
     }
 
     // Edit a user
@@ -85,9 +118,7 @@ class AdminController {
 
     // Manage applications
     public static function manageApplications() {
-        $conn = Database::getInstance()->getConnection();
-        $applications = AdminClass::getApplications($conn);
-        include '../Views/applicationsView.php'; // Render the applications view
+        include '../Views/ApplicationsView.php'; // Render the applications view
     }
 
     // View all trainers
