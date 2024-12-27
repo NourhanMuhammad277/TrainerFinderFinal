@@ -2,7 +2,7 @@
 
 use Database;
 
-class AdminModel
+class AdminClass
 {
 
     // Get all applications
@@ -20,18 +20,31 @@ class AdminModel
     }
 
     // Get all users
-    public static function getUsers()
-    {
-        $db = Database::getInstance();
-        $conn = $db->getConnection();
+    public static function getUsers($conn) {
+        $query = "SELECT id, username, email FROM users";
+        $result = $conn->query($query);
+        $users = [];
 
-        $query = "SELECT * FROM users"; // Replace with actual table and columns
-        $result = mysqli_query($conn, $query);
-
-        if ($result) {
-            return mysqli_fetch_all($result, MYSQLI_ASSOC);
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $users[] = $row;
+            }
         }
-        return [];
+        return $users;
+    }
+
+    public static function updateUser($conn, $id, $username, $email) {
+        $query = "UPDATE users SET username = ?, email = ? WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('ssi', $username, $email, $id);
+        return $stmt->execute();
+    }
+
+    public static function deleteUser($conn, $id) {
+        $query = "DELETE FROM users WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('i', $id);
+        return $stmt->execute();
     }
 
     // Get all trainers
@@ -81,49 +94,6 @@ class AdminModel
         return false;
     }
 
-    // Delete a user
-    public static function deleteUser($userId)
-    {
-        $db = Database::getInstance();
-        $conn = $db->getConnection();
-
-        $query = "DELETE FROM users WHERE id = ?";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "i", $userId);
-
-        if (mysqli_stmt_execute($stmt)) {
-            return true;
-        }
-        return false;
-    }
-
-    // Update a user
-    public static function updateUser(
-        $userId,
-        $email,
-        $username,
-        $password
-    ) {
-        $db = Database::getInstance();
-        $conn = $db->getConnection();
-
-        $query =
-            "UPDATE users SET email = ?, username = ?, password = ? WHERE id = ?";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param(
-            $stmt,
-            "sssi",
-            $email,
-            $username,
-            $password,
-            $userId
-        );
-
-        if (mysqli_stmt_execute($stmt)) {
-            return true;
-        }
-        return false;
-    }
 
     // Edit a trainer
     public static function updateTrainer(

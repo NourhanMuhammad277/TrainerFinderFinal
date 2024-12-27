@@ -3,8 +3,11 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Include database connection
-include('../db.php');
+include_once '../db.php'; 
+
+// Get database connection
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
 // Handle deletion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
@@ -17,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     } else {
         $_SESSION['message'] = "Error deleting user.";
     }
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
+
 }
 
 // Handle edit/update
@@ -35,8 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_id'])) {
     } else {
         $_SESSION['message'] = "Error updating user.";
     }
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
 }
 
 // Fetch users from the database
@@ -56,6 +56,8 @@ if ($result && $result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users List | Trainer Finder</title>
+    <link rel="stylesheet" href="../Assets/CSS/lists.css">
+    <link rel="stylesheet" href="../Assets/CSS/header-footer.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script defer src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
@@ -84,8 +86,8 @@ if ($result && $result->num_rows > 0) {
     <a class="navbar-brand" href="#">Trainer Finder</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="admin.php">Admin Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="login.php">Log Out</a></li>
+            <li class="nav-item"><a class="nav-link" href="../Views/adminView.php">Admin Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="../Views/LoginSignupView.php">Log Out</a></li>
         </ul>
     </div>
 </nav>
