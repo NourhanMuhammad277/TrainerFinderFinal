@@ -134,7 +134,7 @@ class AdminController {
     // Update a trainer
     public static function updateTrainer() {
         $conn = Database::getInstance()->getConnection();
-
+    
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_id'])) {
             $update_id = intval($_POST['update_id']);
             $username = trim($_POST['username']);
@@ -149,13 +149,19 @@ class AdminController {
                              WHERE id = ?";
             $stmt = $conn->prepare($update_query);
             $stmt->bind_param('ssssssi', $username, $email, $location, $sport, $day_time, $state, $update_id);
+            
             if ($stmt->execute()) {
                 $_SESSION['message'] = "Trainer updated successfully.";
             } else {
                 $_SESSION['message'] = "Error updating trainer.";
             }
+            
+            // Include the trainers list view with the updated message
+            self::viewTrainers(); // This will include 'Trainerslist.php' and display the message
+            exit();
         }
     }
+    
 
     // Delete a trainer
     public static function deleteTrainer() {
@@ -171,7 +177,9 @@ class AdminController {
             } else {
                 $_SESSION['message'] = "Error deleting trainer.";
             }
-        }}
+            self::viewTrainers(); // This will include 'Trainerslist.php' and display the message
+            exit();  } }
+        
         
 }
 
