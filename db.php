@@ -1,12 +1,12 @@
 <?php
 
 // Usage
-// $db = Database::getInstance();
-// $connection = $db->getConnection();
+// 
+// $connection = Database::getInstance()->getConnection();
 class Database
 {
     private static $instance;
-    private mysqli $connection;
+    private \mysqli  $connection; 
 
     private function __construct()
     {
@@ -22,7 +22,7 @@ class Database
         return self::$instance;
     }
 
-    public function getConnection(): mysqli
+    public function getConnection(): \mysqli
     {
         return $this->connection;
     }

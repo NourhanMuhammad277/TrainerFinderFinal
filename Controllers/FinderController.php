@@ -1,8 +1,10 @@
 <?php
-use AccpetedTrainerModel;
+
+require __DIR__ ."/../Models/AcceptedTrainerModel.php";
+
 class FinderController {
 public static function index(){
-$trainers = AccpetedTrainerModel::getAll();
+$trainers = AcceptedTrainerModel::getAll();
 return $trainers;
 }
 
