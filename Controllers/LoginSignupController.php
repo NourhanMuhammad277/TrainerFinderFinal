@@ -1,12 +1,11 @@
 <?php
 include_once '../db.php';  
 include_once '../Models/User.php';
-include_once '../Models/Admin.php';
+include_once '../Models/AdminModel.php';
 
 class LoginSignupController {
     public static function handleRequest() {
-        $db = Database::getInstance();
-        $conn = $db->getConnection();
+        $conn = Database::getInstance()->getConnection();
 
         session_start();
 
@@ -89,10 +88,13 @@ class LoginSignupController {
                         $hashed_password = password_hash($password_signup, PASSWORD_BCRYPT);
                         $userCreated = User::createUser($email_signup, $hashed_password, $username);
                         if ($userCreated) {
-                            $_SESSION['user_id'] = $conn->insert_id;
-                            header("Location: ../Views/myProfile.php");
-                            exit();
-                        } else {
+                        echo "<script>
+                                alert('User created successfully!');
+                                window.location.href = '../index.php';
+                            </script>";
+                        exit();
+                    }
+                        else {
                             $signup_error = "Error: Could not create user.";
                         }
                     }

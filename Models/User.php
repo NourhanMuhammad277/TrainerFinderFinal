@@ -1,5 +1,6 @@
 <?php
-use Database;
+include_once '../db.php';
+
 class User {
 
  //USING CRUD OPERATIONS 
@@ -35,6 +36,41 @@ class User {
         // Return null if no user found
         return null;
     }
+    public static function getUserById($user_id) {
+        // Get the database connection
+        $db = Database::getInstance()->getConnection();
+
+        // Prepare the query to fetch email, username, and password by ID
+        $query = "SELECT username, email, password FROM users WHERE id = ?";
+
+        // Prepare the statement
+        if ($stmt = $db->prepare($query)) {
+            // Bind parameters
+            $stmt->bind_param("i", $user_id);
+
+            // Execute the query
+            $stmt->execute();
+
+            // Bind the result to variables
+            $stmt->bind_result($username, $email, $password);
+
+            // Fetch the result
+            if ($stmt->fetch()) {
+                // Return the user data as an associative array
+                return [
+                    'username' => $username,
+                    'email' => $email,
+                    'password' => $password
+                ];
+            } else {
+                return null;  // Return null if no user found
+            }
+        } else {
+            // If statement preparation fails
+            return null;
+        }
+    }
+
 
    //create
     public static function createUser( $email, $password, $username) {
