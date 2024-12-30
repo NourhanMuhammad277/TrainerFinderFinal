@@ -42,7 +42,8 @@ class AdminController {
     public static function viewUsers() {
         include '../Views/userslistView.php'; // Render the users list view
     }
-    public static function getAllApplications($conn) {
+    public static function getAllApplications() {
+        $conn = Database::getInstance()->getConnection();
         $sql = "SELECT ta.id, u.username, u.email, ta.location, ta.sport, ta.day_time, ta.certificate, ta.state
                 FROM trainer_applications ta
                 JOIN users u ON ta.user_id = u.id
@@ -50,7 +51,8 @@ class AdminController {
         $result = $conn->query($sql);
         return $result;
     }
-    public static function acceptApplication($conn, $application_id, $user_id, $username, $email, $certificate, $location, $sport, $day_time) {
+    public static function acceptApplication($application_id, $user_id, $username, $email, $certificate, $location, $sport, $day_time) {
+        $conn = Database::getInstance()->getConnection();
         // Insert into accepted_trainers
         $sql_insert = "INSERT INTO accepted_trainers (user_id, username, email, certificate, location, sport, day_time, state, approved_at)
                        VALUES (?, ?, ?, ?, ?, ?, ?, 'accepted', NOW())";
@@ -67,8 +69,9 @@ class AdminController {
         }
         return false;
     }
-    public static function denyApplication($conn, $application_id) {
+    public static function denyApplication( $application_id) {
         // Update application state to denied
+        $conn = Database::getInstance()->getConnection();
         $sql_update = "UPDATE trainer_applications SET state = 'denied' WHERE id = ?";
         $stmt_update = $conn->prepare($sql_update);
         $stmt_update->bind_param("i", $application_id);
@@ -126,7 +129,8 @@ class AdminController {
         include '../Views/Trainerslist.php';
     }
    
-    public static function getAllTrainers($conn) {
+    public static function getAllTrainers() {
+        $conn = Database::getInstance()->getConnection();
         $trainers = [];
         $sql = "SELECT * FROM accepted_trainers";
         $result = $conn->query($sql);

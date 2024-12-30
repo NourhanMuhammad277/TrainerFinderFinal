@@ -4,14 +4,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Include database connection and controller
-include_once '../db.php'; 
 include_once '../Controllers/AdminController.php';
 
-$db = Database::getInstance();
-$conn = $db->getConnection();
 
 // Fetch all pending applications
-$applications = AdminController::getAllApplications($conn);
+$applications = AdminController::getAllApplications();
 
 ?>
 <!DOCTYPE html>
@@ -121,13 +118,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sport = $_POST['sport'];
         $day_time = $_POST['day_time'];
 
-        if (AdminController::acceptApplication($conn, $application_id, $user_id, $username, $email, $certificate, $location, $sport, $day_time)) {
+        if (AdminController::acceptApplication( application_id: $application_id, user_id: $user_id, username: $username, email: $email, certificate: $certificate, location: $location, sport: $sport, day_time: $day_time)) {
             $_SESSION['message'] = 'Application accepted successfully!';
         } else {
             $_SESSION['message'] = 'Failed to accept application.';
         }
     } elseif ($action == 'deny') {
-        if (AdminController::denyApplication($conn, $application_id)) {
+        if (AdminController::denyApplication( application_id: $application_id)) {
             $_SESSION['message'] = 'Application denied successfully!';
         } else {
             $_SESSION['message'] = 'Failed to deny application.';

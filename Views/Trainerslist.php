@@ -3,13 +3,10 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include_once '../db.php'; 
 include_once '../Controllers/AdminController.php';
 
-$db = Database::getInstance();
-$conn = $db->getConnection();
 
-$trainers = AdminController::getAllTrainers($conn);
+$trainers = AdminController::getAllTrainers();
 
 ?>
 <!DOCTYPE html>
