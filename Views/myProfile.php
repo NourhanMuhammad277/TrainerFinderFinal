@@ -78,6 +78,9 @@ include_once './components/head.php';
                 <p class="card-text"><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
                 <button class="btn btn-success" data-toggle="modal" data-target="#applyModal">Apply as a Trainer</button>
                 <button class="btn btn-success" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
+                <a href="/TrainerFinderFinal/Views/Trainers/index.php">
+                    <button class="btn btn-success">Find Trainers</button>
+                </a>
             </div>
         </div>
     </div>

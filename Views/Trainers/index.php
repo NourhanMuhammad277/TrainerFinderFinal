@@ -12,23 +12,19 @@ include_once("../components/head.php");
     <?php
 
     $trainers = FinderController::index();
-    $success1 = false;
-    $message = "";
+    $success1;
+   
     $currentUserId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
-    if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['subscribe']) and $currentUserId != null) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['Subscribe']) and $currentUserId != null) {
         $trainer_id = $_POST['trainer_id'];
         $success1 = FinderController::subscribe(trainer_id: $trainer_id, user_id: $currentUserId);
         $message = $success1 ? 'Successfully subcscribed' : 'Failed to subscribe';
     } else {
-        $message = '';
+        $message = 'Please login to subscribe';
     }
 
     ?>
-    <?php if (isset($message)): ?>
-        <!-- <div class="alert"><?= htmlspecialchars($message) ?></div> -->
-        <script>
-            alert(" <?= htmlspecialchars($message) ?> ")
-        </script> <?php endif; ?>
+   
     <?php if ($trainers): ?>
         <div>
             <ul>
@@ -63,10 +59,10 @@ include_once("../components/head.php");
 
 
                         <!-- this is so dumb this is why i wanted laravel u cant convince me this is good -->
-                        <input type="hidden" name="trainer_id" value="<?= $tr['user_id'] ?>" />
+                        <input type="hidden" name="trainer_id" value="<?= $tr['id'] ?>" />
 
                         <!--  $_SESSION['user_id'] -->
-                        <input type="submit" value="Subscribe" name="subscribe" />
+                        <input type="submit" value="Subscribe" name="Subscribe" />
                     </form>
 
                 <?php endforeach ?>

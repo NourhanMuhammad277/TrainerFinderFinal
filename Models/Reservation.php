@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once __DIR__ . "/../db.php";
 // Enable error reporting for debugging
@@ -34,10 +34,12 @@ class Reservation implements Model
     }
     public static function create($data): bool
     {
+        $trainer_id = (int)$data['trainer_id'];
+        $user_id = (int)$data['user_id'];
         $conn = Database::getInstance()->getConnection();
-        $query = "INSERT INTO reservation (trainer_id, user_id) VALUES (?, ?)";
+        $query = "INSERT INTO reservation (`user_id`, `trainer_id`) VALUES (?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ii", $data['trainer_id'], vars: $data['user_id']);
+        $stmt->bind_param("ii", $user_id,  $trainer_id);
         $success = $stmt->execute();
         $stmt->close();
         return $success;
