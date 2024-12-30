@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-    <a class="navbar-brand" href="#">
-        <img src="../../Assets/Images/ss.png" alt="Logo"
+    <a class="navbar-brand" href="/TrainerFinderFinal/index.php">
+        <img src="/TrainerFinderFinal/Assets/Images/ss.png" alt="Logo"
          style="height:30px; width:30px; margin-right:10px;">
         Trainer Finder
     </a>
