@@ -11,16 +11,13 @@ include_once("../components/head.php");
     <?php
 
     $trainers = FinderController::index();
-
-    function handleSubscribe(int $trainer_id): void
-    {
-        $currentUserId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-        if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['subscribe']) and $currentUserId != null) {
-            FinderController::subscribe(trainer_id: $trainer_id, user_id: $currentUserId);
-            $message = "Subscribed successfully";
-        } else {
-            $message = "Please login to subscribe";
-        }
+    $success1 = false;
+    $message = "";
+    $currentUserId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
+    if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['subscribe']) and $currentUserId != null) {
+        $trainer_id = $_POST['trainer_id'];
+        $success1 = FinderController::subscribe(trainer_id: $trainer_id, user_id: $currentUserId);
+        $message = $success1 ? 'Successfully subcscribed' : 'Failed to subscribe';
     }
 
     ?>
@@ -69,11 +66,12 @@ include_once("../components/head.php");
 
                 <?php endforeach ?>
             </ul>
-
+          <?php  echo $_SESSION['user_id']; ?>
         </div>
     <?php else : ?>
         <p>No trainers found.</p>
     <?php endif ?>
 
 </body>
+
 </html>

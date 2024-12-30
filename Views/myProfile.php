@@ -78,33 +78,7 @@ $user = $profileController->getUserData();
     </script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
-    <a class="navbar-brand" href="#">
-        <img src="../assets/images/ss.png" alt="Logo" style="height:30px; width:30px; margin-right:10px;">
-        Trainer Finder
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="Home.php">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="trainers.php">Trainers</a></li>
-            <li class="nav-item"><a class="nav-link" href="about.php">About Us</a></li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                    <i class="fas fa-user"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="myProfile.php">View Profile</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="logout.php">Log Out</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
-
+<?php include_once './components/nav.php'; ?>
 <div class="container mt-5">
     <h2 class="text-center mb-4">User Profile</h2>
     <div class="card">
