@@ -156,7 +156,7 @@ class AdminController {
             $sport = trim($_POST['sport']);
             $timings = trim($_POST['timings']);
 
-            $result = AdminClass::addTrainer($conn, $username, $email, $location, $sport, $timings);
+            $result = AdminClass::addTrainer( username: $username, email: $email, location: $location, sport: $sport, timings: $timings);
 
             if ($result) {
                 header('Location: ../Controllers/adminController.php?page=viewTrainers');
