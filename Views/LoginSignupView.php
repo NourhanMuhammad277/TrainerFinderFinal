@@ -22,13 +22,13 @@
                 <a class="nav-link" href="../index.php">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="trainers.php">Trainers</a>
+                <a class="nav-link" href="../Views/Trainers/index.php">Trainers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../Views/about.php">About Us</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="LoginSignupView.php"><i class="fas fa-user"></i></a>
+                <a class="nav-link" href="../Views/LoginSignupView.php"><i class="fas fa-user"></i></a>
             </li>
         </ul>
     </div>
@@ -83,9 +83,7 @@
             </div>
 
             <!-- Display "Invalid email or password" below the button if login fails -->
-            <?php if ($login_error): ?>
-                <div class="error-message"><?= $login_error ?></div>
-            <?php endif; ?>
+  
 
             <button type="submit" name="login">Login</button>
         </form>

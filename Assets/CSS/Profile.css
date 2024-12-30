@@ -1,0 +1,28 @@
+body {
+	font-family: Arial, sans-serif;
+	background-color: black;
+	color: white;
+}
+nav {
+	background-color: #28a745;
+}
+.card {
+	background-color: #343a40;
+	border: none;
+	margin: 20px auto;
+	max-width: 600px;
+}
+.card-title {
+	color: #28a745;
+}
+label,
+#applyModalLabel {
+	color: black;
+}
+.error {
+	color: red;
+}
+.multi-select {
+	height: 150px;
+	overflow-y: auto;
+}

@@ -10,7 +10,7 @@ class Database
 
     private function __construct()
     {
-        $this->connection = mysqli_connect("localhost", "root", "", "TrainerFinder");
+        $this->connection = mysqli_connect("localhost", "root", "", "trainerfinder");
     }
 
     public static function getInstance(): Database
