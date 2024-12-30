@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once(__DIR__ . '/../../Controllers/FinderController.php');
 include_once("../components/head.php");
 ?>
@@ -18,12 +19,16 @@ include_once("../components/head.php");
         $trainer_id = $_POST['trainer_id'];
         $success1 = FinderController::subscribe(trainer_id: $trainer_id, user_id: $currentUserId);
         $message = $success1 ? 'Successfully subcscribed' : 'Failed to subscribe';
+    } else {
+        $message = '';
     }
 
     ?>
     <?php if (isset($message)): ?>
-        <div class="alert"><?= htmlspecialchars($message) ?></div>
-    <?php endif; ?>
+        <!-- <div class="alert"><?= htmlspecialchars($message) ?></div> -->
+        <script>
+            alert(" <?= htmlspecialchars($message) ?> ")
+        </script> <?php endif; ?>
     <?php if ($trainers): ?>
         <div>
             <ul>
@@ -66,12 +71,12 @@ include_once("../components/head.php");
 
                 <?php endforeach ?>
             </ul>
-          <?php  echo $_SESSION['user_id']; ?>
+            <?php echo $_SESSION['user_id']; ?>
         </div>
     <?php else : ?>
         <p>No trainers found.</p>
     <?php endif ?>
-
+    <?php include_once "../components/footer.php" ?>
 </body>
 
 </html>

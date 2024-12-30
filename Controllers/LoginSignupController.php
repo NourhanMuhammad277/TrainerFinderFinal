@@ -1,11 +1,9 @@
 <?php
-include_once '../db.php';  
 include_once '../Models/User.php';
 include_once '../Models/AdminModel.php';
 
 class LoginSignupController {
     public static function handleRequest() {
-        $conn = Database::getInstance()->getConnection();
 
         session_start();
 

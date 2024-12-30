@@ -81,14 +81,14 @@ class AdminController {
 
     // Edit a user
     public static function editUser() {
-        $conn = Database::getInstance()->getConnection();
+        
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_id'])) {
             $id = intval($_POST['update_id']);
             $username = trim($_POST['username']);
             $email = trim($_POST['email']);
 
-            $result = AdminClass::updateUser($conn, $id, $username, $email);
+            $result = AdminClass::updateUser( id: $id, username: $username, email: $email);
 
             if ($result) {
                 $_SESSION['message'] = "User updated successfully.";
@@ -102,12 +102,12 @@ class AdminController {
 
     // Delete a user
     public static function deleteUser() {
-        $conn = Database::getInstance()->getConnection();
+        
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
             $id = intval($_POST['delete_id']);
 
-            $result = AdminClass::deleteUser($conn, $id);
+            $result = AdminClass::deleteUser( $id);
 
             if ($result) {
                 $_SESSION['message'] = "User deleted successfully.";
@@ -147,7 +147,7 @@ class AdminController {
     
     // Add a new trainer
     public static function addTrainer() {
-        $conn = Database::getInstance()->getConnection();
+       
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = trim($_POST['username']);

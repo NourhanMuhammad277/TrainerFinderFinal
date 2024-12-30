@@ -22,7 +22,8 @@ class AdminClass
     }
 
     // Get all users
-    public static function getUsers($conn) {
+    public static function getUsers() {
+        $conn = Database::getInstance()->getConnection();
         $query = "SELECT id, username, email FROM users";
         $result = $conn->query($query);
         $users = [];
@@ -35,14 +36,16 @@ class AdminClass
         return $users;
     }
 
-    public static function updateUser($conn, $id, $username, $email) {
+    public static function updateUser( $id, $username, $email) {
+        $conn = Database::getInstance()->getConnection();
         $query = "UPDATE users SET username = ?, email = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param('ssi', $username, $email, $id);
         return $stmt->execute();
     }
 
-    public static function deleteUser($conn, $id) {
+    public static function deleteUser( $id) {
+        $conn = Database::getInstance()->getConnection();
         $query = "DELETE FROM users WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param('i', $id);
