@@ -1,6 +1,7 @@
 <?php
 
-use Database;
+include_once '../db.php';
+
 
 class AdminClass
 {
