@@ -60,7 +60,8 @@ class User {
                 return [
                     'username' => $username,
                     'email' => $email,
-                    'password' => $password
+                    'password' => $password,
+                    "id"=> $user_id,
                 ];
             } else {
                 return null;  // Return null if no user found

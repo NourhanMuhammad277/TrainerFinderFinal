@@ -11,7 +11,7 @@ return $trainers;
 
 public static function subscribe($trainer_id , $user_id){
 $W_trainer = AcceptedTrainerModel::getById(id: $trainer_id);
-$W_user = User::getById($user_id);
+$W_user = User::getUserById(user_id: $user_id);
 
 
 }
