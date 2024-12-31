@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer class="footer bg-success">
     <div class="container text-center">
         <h4>Contact Us</h4>
         <ul class="contact-info">
