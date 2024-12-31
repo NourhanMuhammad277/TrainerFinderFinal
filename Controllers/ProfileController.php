@@ -47,5 +47,13 @@ class ProfileController {
         $success = $this->model->insertTrainerApplication($this->userId, $location, $sport, $dayTime, $certificate,$username,$email);
         return $success ;
     }
+    public  function IsTrainer(){
+        $success= $this->model->TrainerChecking($this->userId);
+        return $success ;
+ }
+ public  function IsApplied(){
+    $success= $this->model->ApplyChecking($this->userId);
+    return $success ;
+}
 }
 ?>

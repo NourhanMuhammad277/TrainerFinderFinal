@@ -44,7 +44,7 @@ class AdminController {
     }
     public static function getAllApplications() {
         $conn = Database::getInstance()->getConnection();
-        $sql = "SELECT ta.id, u.username, u.email, ta.location, ta.sport, ta.day_time, ta.certificate, ta.state
+        $sql = "SELECT ta.id,ta.user_id, u.username, u.email, ta.location, ta.sport, ta.day_time, ta.certificate, ta.state
                 FROM trainer_applications ta
                 JOIN users u ON ta.user_id = u.id
                 WHERE ta.state = 'pending'";
@@ -201,19 +201,46 @@ class AdminController {
     // Delete a trainer
     public static function deleteTrainer() {
         $conn = Database::getInstance()->getConnection();
-
+    
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
             $delete_id = intval($_POST['delete_id']);
-            $delete_query = "DELETE FROM accepted_trainers WHERE id = ?";
-            $stmt = $conn->prepare($delete_query);
+    
+            $fetch_query = "SELECT user_id FROM accepted_trainers WHERE id = ?";
+            $stmt = $conn->prepare($fetch_query);
             $stmt->bind_param('i', $delete_id);
-            if ($stmt->execute()) {
-                $_SESSION['message'] = "Trainer deleted successfully.";
+            $stmt->execute();
+            $result = $stmt->get_result();
+    
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $user_id = $row['user_id'];
+    
+                $update_query = "UPDATE trainer_applications SET state = ? WHERE user_id = ?";
+                $stmt2 = $conn->prepare($update_query);
+                $pending_state = 'pending';
+                $stmt2->bind_param('si', $pending_state, $user_id);
+    
+                if ($stmt2->execute()) {
+                    $delete_query = "DELETE FROM accepted_trainers WHERE id = ?";
+                    $stmt3 = $conn->prepare($delete_query);
+                    $stmt3->bind_param('i', $delete_id);
+    
+                    if ($stmt3->execute()) {
+                        $_SESSION['message'] = "Trainer deleted successfully, and state updated to pending.";
+                    } else {
+                        $_SESSION['message'] = "Failed to delete trainer from accepted_trainers.";
+                    }
+                } else {
+                    $_SESSION['message'] = "Failed to update state to pending.";
+                }
             } else {
-                $_SESSION['message'] = "Error deleting trainer.";
+                $_SESSION['message'] = "Trainer not found.";
             }
-            self::viewTrainers(); // This will include 'Trainerslist.php' and display the message
-            exit();  } }
+    
+            self::viewTrainers();
+            exit();
+        }
+    }
         
         
 }

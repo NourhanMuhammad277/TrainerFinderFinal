@@ -4,7 +4,8 @@ include_once '../Controllers/ProfileController.php';
 session_start();
 $profileController = new ProfileController($_SESSION['user_id']);
 $user = $profileController->getUserData();
-
+$isTrainer = $profileController->IsTrainer($_SESSION['user_id']);
+$isApplied = $profileController->IsApplied($_SESSION['user_id']);
 include_once './components/head.php';
 ?>
 
@@ -76,7 +77,16 @@ include_once './components/head.php';
                 <h5 class="card-title">Profile Information</h5>
                 <p class="card-text"><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
                 <p class="card-text"><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+                <?php if ($isTrainer): ?>
+                <button class="btn btn-primary" onclick="location.href='../Views/trainerProfile.php';">View Trainer Profile</button>
+            <?php else: ?>
+                    <?php if($isApplied): ?>
+                <button class="btn btn-success" data-toggle="modal" style="background-color:orange" Disabled>Pending</button>
+                    <?php else:?>
                 <button class="btn btn-success" data-toggle="modal" data-target="#applyModal">Apply as a Trainer</button>
+                    <?php endif; ?>
+
+            <?php endif; ?>
                 <button class="btn btn-success" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
                 <a href="/TrainerFinderFinal/Views/Trainers/index.php">
                     <button class="btn btn-success">Find Trainers</button>
@@ -174,7 +184,6 @@ include_once './components/head.php';
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script></body>
 
 </html>

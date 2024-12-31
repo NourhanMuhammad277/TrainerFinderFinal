@@ -45,7 +45,22 @@ class ProfileModel {
         return false;
     }
 }
-
+public function TrainerChecking($user_id){
+    $query = "SELECT * FROM accepted_trainers WHERE user_id = ?";
+    $stmt = $this->connection->prepare($query);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->num_rows > 0;
+    }
+    public function ApplyChecking($user_id){
+        $query = "SELECT * FROM trainer_applications WHERE user_id = ?";
+        $stmt = $this->connection->prepare($query);
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+        }
 }
 
 ?>

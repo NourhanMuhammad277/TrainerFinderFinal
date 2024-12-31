@@ -4,13 +4,45 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Include database connection and controller
+include_once '../db.php'; 
 include_once '../Controllers/AdminController.php';
 
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
 // Fetch all pending applications
-$applications = AdminController::getAllApplications();
+$applications = AdminController::getAllApplications($conn);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $action = $_POST['action'];
+    $application_id = $_POST['application_id'];
+    
+    if ($action == 'accept') {
+        $user_id = $_POST['user_id'];
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $certificate = $_POST['certificate'];
+        $location = $_POST['location'];
+        $sport = $_POST['sport'];
+        $day_time = $_POST['day_time'];
 
+        if (AdminController::acceptApplication( $application_id, $user_id, $username, $email, $certificate, $location, $sport, $day_time)) {
+            $_SESSION['message'] = 'Application accepted successfully!';
+        } else {
+            $_SESSION['message'] = 'Failed to accept application.';
+        }
+    } elseif ($action == 'deny') {
+        if (AdminController::denyApplication( $application_id)) {
+            $_SESSION['message'] = 'Application denied successfully!';
+        } else {
+            $_SESSION['message'] = 'Failed to deny application.';
+        }
+    }
+
+header('Refresh:0; ');
+
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,7 +106,7 @@ $applications = AdminController::getAllApplications();
                                 <td><?= htmlspecialchars($application['sport']) ?></td>
                                 <td><?= htmlspecialchars($application['day_time']) ?></td>
                                 <td>
-                                    <a href="uploads/<?= htmlspecialchars($application['certificate']) ?>" target="_blank">View Certificate</a>
+                                    <a href="../Assets/uploads/<?= htmlspecialchars($application['certificate']) ?>" target="_blank">View Certificate</a>
                                 </td>
                                 <td>
                                     <form method="POST" style="display:inline;" onsubmit="return confirmAction('accept')">
@@ -104,36 +136,7 @@ $applications = AdminController::getAllApplications();
     </div>
 </div>
 
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $action = $_POST['action'];
-    $application_id = $_POST['application_id'];
-    
-    if ($action == 'accept') {
-        $user_id = $_POST['user_id'];
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $certificate = $_POST['certificate'];
-        $location = $_POST['location'];
-        $sport = $_POST['sport'];
-        $day_time = $_POST['day_time'];
 
-        if (AdminController::acceptApplication( application_id: $application_id, user_id: $user_id, username: $username, email: $email, certificate: $certificate, location: $location, sport: $sport, day_time: $day_time)) {
-            $_SESSION['message'] = 'Application accepted successfully!';
-        } else {
-            $_SESSION['message'] = 'Failed to accept application.';
-        }
-    } elseif ($action == 'deny') {
-        if (AdminController::denyApplication( application_id: $application_id)) {
-            $_SESSION['message'] = 'Application denied successfully!';
-        } else {
-            $_SESSION['message'] = 'Failed to deny application.';
-        }
-    }
-
-    header('Location: adminView.php');
-}
-?>
 
 </body>
 </html>
