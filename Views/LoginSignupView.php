@@ -84,7 +84,9 @@
 
             <!-- Display "Invalid email or password" below the button if login fails -->
   
-
+            <?php if ($login_error): ?>
+                <div class="error-message"><?= $login_error ?></div>
+            <?php endif; ?>
             <button type="submit" name="login">Login</button>
         </form>
     </div>
