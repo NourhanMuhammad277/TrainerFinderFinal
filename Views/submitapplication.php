@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sport = trim($_POST['sport']);
     $dayTime = $_POST['dayTime'] ?? [];
     $certificate = $_FILES['certificate'];
- 
+    $username = $_POST['username'];
+    $email = $_POST['email'];
     // Validate input
     if (empty($location) || empty($sport) || empty($dayTime) || empty($certificate['name'])) {
         $_SESSION['error_message'] = "All fields are required.";
@@ -30,19 +31,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fileExtension = pathinfo($certificate['name'], PATHINFO_EXTENSION);
 
     if (!in_array($fileExtension, $allowedExtensions)) {
-        $_SESSION['error_message'] = "Only PDF files are allowed for the certificate.";
-        header("Location: ../Views/myProfile.php");
-        exit();
+       $_SESSION['error_message'] = "Only PDF files are allowed for the certificate.";
+       header("Location: ../Views/myProfile.php");
+     exit();
     }
 
-    // Upload file
-    $targetDir = "../Assets/uploads";
-    $targetFile = $targetDir . basename($certificate['name']);
-    if (!move_uploaded_file($certificate['tmp_name'], $targetFile)) {
-        $_SESSION['error_message'] = "Failed to upload certificate.";
-        header("Location: ../Views/myProfile.php");
-        exit();
-    }
+   
+// Upload file
+$targetDir = "../Assets/uploads/";
+$targetFile = $targetDir . basename($certificate['name']);
+
+if (!file_exists($certificate['tmp_name'])) {
+    echo "Temporary file does not exist: " . $certificate['tmp_name'];
+    exit();
+}
+
+if (!is_writable($targetDir)) {
+    echo "Target directory is not writable: " . $targetDir;
+    exit();
+}
+
+if (!move_uploaded_file($certificate['tmp_name'], $targetFile)) {
+    echo "File move failed. Temp file: " . $certificate['tmp_name'] . ", Target file: " . $targetFile;
+    exit();
+}
+
+
+
 
     // Prepare application data
     $applicationData = [
@@ -50,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'sport' => $sport,
         'dayTime' => $dayTime,
         'certificate' => $certificate['name'],
-        'username' => null,
-        'email' => null
+        'username' => $username,
+        'email' => $email
     ];
 
     // Submit trainer application
