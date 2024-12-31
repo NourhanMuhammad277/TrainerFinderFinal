@@ -4,7 +4,7 @@ require_once(__DIR__ . '/../../Controllers/FinderController.php');
 include_once("../components/head.php");
 ?>
 
-<body class="">
+<body class="" >
     <?php
     include_once("../components/nav.php");
     ?>
@@ -13,7 +13,8 @@ include_once("../components/head.php");
 
     $trainers = FinderController::index();
     $success1;
-
+    $searchedTrainers = false;
+    //handle subscribe
     $currentUserId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
     if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['Subscribe']) and $currentUserId != null) {
         $trainer_id = $_POST['trainer_id'];
@@ -22,14 +23,55 @@ include_once("../components/head.php");
     } else {
         $message = 'Please login to subscribe';
     }
-
+    //handle search
+    if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['Search'])) {
+        $sport = $_POST['sport'];
+        $location = $_POST['location'];
+        $searchedTrainers = array_filter($trainers, function ($trainer) use ($sport, $location) {
+            return ($trainer['sport'] == $sport && $trainer['location'] == $location);
+        });
+    }
     ?>
 
-    <?php if ($trainers): ?>
+
+    <form action="" method="post">
+        <div class="container">
+
+            <div class="form-group " style="max-width: 50%;">
+                <label for="location">Location</label>
+                <select class="form-control" id="location" name="location" style="max-width: 50%;">
+                    <option value="" disabled selected>Select your location</option>
+                    <option value="New Cairo">New Cairo</option>
+                    <option value="Nasr City">Nasr City</option>
+                    <option value="Sheraton">Sheraton</option>
+                    <option value="Korba">Korba</option>
+                    <option value="Manial">Manial</option>
+                    <option value="6th of October">6th of October</option>
+                    <option value="Dokki">Dokki</option>
+                </select>
+            </div>
+            <div class="form-group" style="max-width: 50%;">
+                <label for="sport">Sport</label>
+                <select class="form-control" id="sport" name="sport" style="max-width: 50%;">
+                    <option value="" disabled selected>Select your sport</option>
+                    <option value="Squash">Squash</option>
+                    <option value="Padel">Padel</option>
+                    <option value="Basketball">Basketball</option>
+                    <option value="Tennis">Tennis</option>
+                    <option value="Football">Football</option>
+                    <option value="Boxing">Boxing</option>
+                </select>
+            </div>
+            <input type="submit" value="Search" name="Search" class="btn btn-primary " />
+        </div>
+    </form>
+
+
+    <?php if ($searchedTrainers != null): ?>
         <div class="container d-flex p-2 justify-content-center   ">
             <ul class="list-group  ">
 
-                <?php foreach ($trainers as $tr): ?>
+                <?php foreach ($searchedTrainers as $tr): ?>
                     <form action="" method="post" class="pb-2">
                         <li class="list-group-item  ">
                             <h1>
@@ -63,8 +105,8 @@ include_once("../components/head.php");
             </ul>
 
         </div>
-    <?php else : ?>
-        <p>No trainers found.</p>
+        <!-- php else -->
+        <!-- <p>No trainers found.</p> -->
     <?php endif ?>
     <?php include_once "../components/footer.php" ?>
 </body>
