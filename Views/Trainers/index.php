@@ -4,7 +4,7 @@ require_once(__DIR__ . '/../../Controllers/FinderController.php');
 include_once("../components/head.php");
 ?>
 
-<body class="" >
+<body class="">
     <?php
     include_once("../components/nav.php");
     ?>
@@ -33,81 +33,81 @@ include_once("../components/head.php");
     }
     ?>
 
-
-    <form action="" method="post">
-        <div class="container">
-
-            <div class="form-group " style="max-width: 50%;">
-                <label for="location">Location</label>
-                <select class="form-control" id="location" name="location" style="max-width: 50%;">
-                    <option value="" disabled selected>Select your location</option>
-                    <option value="New Cairo">New Cairo</option>
-                    <option value="Nasr City">Nasr City</option>
-                    <option value="Sheraton">Sheraton</option>
-                    <option value="Korba">Korba</option>
-                    <option value="Manial">Manial</option>
-                    <option value="6th of October">6th of October</option>
-                    <option value="Dokki">Dokki</option>
-                </select>
+    <div class="container-fluid py-5">
+        <form method="post" class="mb-4" id="searchForm">
+            <div class="row justify-content-center">
+                <div class="col-md-6 bg-light p-4 rounded shadow-sm">
+                    <div class="form-group" style="max-width: 50%;">
+                        <label for="location">Location</label>
+                        <select class="form-control" id="location" name="location" style="max-width: 50%;">
+                            <option value="" disabled selected>Select your location</option>
+                            <option value="New Cairo">New Cairo</option>
+                            <option value="Nasr City">Nasr City</option>
+                            <option value="Sheraton">Sheraton</option>
+                            <option value="Korba">Korba</option>
+                            <option value="Manial">Manial</option>
+                            <option value="6th of October">6th of October</option>
+                            <option value="Dokki">Dokki</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="max-width: 50%;">
+                        <label for="sport">Sport</label>
+                        <select class="form-control" id="sport" name="sport" style="max-width: 50%;">
+                            <option value="" disabled selected>Select your sport</option>
+                            <option value="Squash">Squash</option>
+                            <option value="Padel">Padel</option>
+                            <option value="Basketball">Basketball</option>
+                            <option value="Tennis">Tennis</option>
+                            <option value="Football">Football</option>
+                            <option value="Boxing">Boxing</option>
+                        </select>
+                    </div>
+                    <input type="submit" value="Search" name="Search" class="btn btn-primary btn-lg" />
+                </div>
             </div>
-            <div class="form-group" style="max-width: 50%;">
-                <label for="sport">Sport</label>
-                <select class="form-control" id="sport" name="sport" style="max-width: 50%;">
-                    <option value="" disabled selected>Select your sport</option>
-                    <option value="Squash">Squash</option>
-                    <option value="Padel">Padel</option>
-                    <option value="Basketball">Basketball</option>
-                    <option value="Tennis">Tennis</option>
-                    <option value="Football">Football</option>
-                    <option value="Boxing">Boxing</option>
-                </select>
+        </form>
+        <script>
+            document.getElementById('searchForm').addEventListener('submit', function(event) {
+                const location = document.getElementById('location').value;
+                const sport = document.getElementById('sport').value;
+                if (!location || !sport) {
+                    event.preventDefault();
+                    alert('Please select both location and sport.');
+                }
+            });
+        </script>
+        <?php if ($searchedTrainers != null): ?>
+            <div class="container d-flex p-2 justify-content-center">
+                <ul class="list-group w-75">
+                    <?php foreach ($searchedTrainers as $tr): ?>
+                        <form action="" method="post" class="mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <li class="list-group-item border-0">
+                                        <h1 class="display-4 mb-3"><?= $tr['username'] ?></h1>
+                                    </li>
+                                    <li class="list-group-item border-0">
+                                        <p class="lead"><i class="fas fa-envelope mr-2"></i><?= $tr['email'] ?></p>
+                                    </li>
+                                    <li class="list-group-item border-0">
+                                        <p class="lead"><i class="fas fa-map-marker-alt mr-2"></i><?= $tr['location'] ?></p>
+                                    </li>
+                                    <li class="list-group-item border-0">
+                                        <p class="lead"><i class="fas fa-running mr-2"></i><?= $tr['sport'] ?></p>
+                                    </li>
+                                    <li class="list-group-item border-0">
+                                        <p class="lead"><i class="far fa-clock mr-2"></i><?= $tr['day_time'] ?></p>
+                                    </li>
+                                    <input type="hidden" name="trainer_id" value="<?= $tr['id'] ?>" />
+                                    <input type="submit" value="Subscribe" name="Subscribe" class="btn btn-success btn-lg btn-block mt-3" />
+                                </div>
+                            </div>
+                        </form>
+                    <?php endforeach; ?>
+                </ul>
             </div>
-            <input type="submit" value="Search" name="Search" class="btn btn-primary " />
-        </div>
-    </form>
-
-
-    <?php if ($searchedTrainers != null): ?>
-        <div class="container d-flex p-2 justify-content-center   ">
-            <ul class="list-group  ">
-
-                <?php foreach ($searchedTrainers as $tr): ?>
-                    <form action="" method="post" class="pb-2">
-                        <li class="list-group-item  ">
-                            <h1>
-                                <p><?= $tr['username'] ?></p>
-                            </h1>
-                        </li>
-                        <li class="list-group-item ">
-                            <p><?= $tr['email'] ?></p>
-                        </li>
-
-                        <li class="list-group-item ">
-                            <p><?= $tr['location'] ?></p>
-                        </li>
-                        <li class="list-group-item ">
-                            <p><?= $tr['sport'] ?></p>
-                        </li>
-                        <li class="list-group-item ">
-                            <p><?= $tr['day_time'] ?></p>
-                        </li>
-
-
-
-                        <!-- this is so dumb this is why i wanted laravel u cant convince me this is good -->
-                        <input type="hidden" name="trainer_id" value="<?= $tr['id'] ?>" />
-
-                        <!--  $_SESSION['user_id'] -->
-                        <input type="submit" value="Subscribe" name="Subscribe" class="btn btn-primary " style="margin-inline-start: 6rem;" />
-                    </form>
-
-                <?php endforeach ?>
-            </ul>
-
-        </div>
-        <!-- php else -->
-        <!-- <p>No trainers found.</p> -->
-    <?php endif ?>
+        <?php endif; ?>
+    </div>
     <?php include_once "../components/footer.php" ?>
 </body>
 
