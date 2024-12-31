@@ -34,7 +34,7 @@ include_once("../components/head.php");
     ?>
 
     <div class="container-fluid py-5">
-        <form method="post" class="mb-4">
+        <form method="post" class="mb-4" id="searchForm">
             <div class="row justify-content-center">
                 <div class="col-md-6 bg-light p-4 rounded shadow-sm">
                     <div class="form-group" style="max-width: 50%;">
@@ -66,7 +66,16 @@ include_once("../components/head.php");
                 </div>
             </div>
         </form>
-
+        <script>
+            document.getElementById('searchForm').addEventListener('submit', function(event) {
+                const location = document.getElementById('location').value;
+                const sport = document.getElementById('sport').value;
+                if (!location || !sport) {
+                    event.preventDefault();
+                    alert('Please select both location and sport.');
+                }
+            });
+        </script>
         <?php if ($searchedTrainers != null): ?>
             <div class="container d-flex p-2 justify-content-center">
                 <ul class="list-group w-75">
