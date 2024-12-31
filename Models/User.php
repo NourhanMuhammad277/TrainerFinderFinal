@@ -1,5 +1,5 @@
 <?php
-include_once '../db.php';
+require_once __DIR__ . "/../db.php";
 
 class User {
 
@@ -41,7 +41,7 @@ class User {
         $db = Database::getInstance()->getConnection();
 
         // Prepare the query to fetch email, username, and password by ID
-        $query = "SELECT username, email, password FROM users WHERE id = ?";
+        $query = "SELECT id, username, email, password FROM users WHERE id = ?";
 
         // Prepare the statement
         if ($stmt = $db->prepare($query)) {
@@ -52,16 +52,16 @@ class User {
             $stmt->execute();
 
             // Bind the result to variables
-            $stmt->bind_result($username, $email, $password);
+            $stmt->bind_result($id,$username, $email, $password);
 
             // Fetch the result
             if ($stmt->fetch()) {
                 // Return the user data as an associative array
                 return [
+                    "id"=> $id,
                     'username' => $username,
                     'email' => $email,
                     'password' => $password,
-                    "id"=> $user_id,
                 ];
             } else {
                 return null;  // Return null if no user found

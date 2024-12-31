@@ -19,19 +19,28 @@ class AcceptedTrainerModel implements Model
         return null;
     }
 
-    public static function getById($id): array
+    public static function getById($id): ?array
     {
-
         $conn = Database::getInstance()->getConnection();
         $query = "SELECT * FROM accepted_trainers WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $id);
         $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
-        return $result;
+        $result = $stmt->get_result();
+
+
+        if ($result && $result->num_rows > 0) {
+            $trainer = $result->fetch_assoc();
+            $stmt->close();
+            $result->close();
+            return $trainer;
+        }
+        $stmt->close();
+        return null;
     }
 
-    //TODO
+
+
     public static function create($data): bool
     {
         $conn = Database::getInstance()->getConnection();

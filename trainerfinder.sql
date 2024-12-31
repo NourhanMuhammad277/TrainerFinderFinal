@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 30, 2024 at 11:14 AM
+-- Generation Time: Dec 31, 2024 at 12:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,7 +46,8 @@ CREATE TABLE `accepted_trainers` (
 --
 
 INSERT INTO `accepted_trainers` (`id`, `user_id`, `username`, `email`, `certificate`, `location`, `sport`, `day_time`, `state`, `approved_at`, `reservations`) VALUES
-(3, 9, 'aml el gedawy', 'amlhatem@gmail.com', 'WhatsApp Image 2024-04-23 at 8.29.11 PM.pdf', 'Sheraton', 'Basketball', 'Monday 02:00 PM', 'accepted', '2024-12-07 19:46:32', NULL);
+(3, 9, 'aml el gedawy', 'amlhatem@gmail.com', 'WhatsApp Image 2024-04-23 at 8.29.11 PM.pdf', 'Sheraton', 'Basketball', 'Monday 02:00 PM', 'accepted', '2024-12-07 19:46:32', NULL),
+(4, 13, 'Randa Khaled', 'randakhaled@gmail.com', 'file.pdf', 'Nasr City', 'Squash', 'Sundays and Tuesdays', 'accepted', '2024-12-26 21:11:53', '5');
 
 -- --------------------------------------------------------
 
@@ -71,14 +72,24 @@ INSERT INTO `admins` (`id`, `email`, `password`, `username`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `subscribe`
+-- Table structure for table `reservation`
 --
 
-CREATE TABLE `subscribe` (
-  `sub_id` int(11) NOT NULL,
-  `trainer_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='relation between user and trainer';
+CREATE TABLE `reservation` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `trainer_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `reservation`
+--
+
+INSERT INTO `reservation` (`id`, `user_id`, `trainer_id`) VALUES
+(3, 7, 3),
+(4, 7, 3),
+(13, 15, 3),
+(14, 15, 4);
 
 -- --------------------------------------------------------
 
@@ -134,7 +145,8 @@ INSERT INTO `users` (`id`, `email`, `password`, `username`, `reserved`) VALUES
 (12, 'mmm@gmail.com', '$2y$10$LDTMgyZ5z4s9SMfe6g0.i.FAvGxrgV.CjELwb4xC4Viak6MEZCxyO', 'mmm', NULL),
 (13, 'randakhaled@gmail.com', '$2y$10$ZC/cUGe.5MFhau.LjN6V7.wHo3R5XsekwOWaruoEYWPPctza5NYxq', 'Randa Khaled', NULL),
 (14, 'ss@gmail.com', '$2y$10$xkqqi4y70zBX9UFqDLnuA.SwY3dB.YSlZQm/uWp7VaAp00uyYhwSS', 'ss', NULL),
-(15, 'urdad@email.com', '$2y$10$jefVY.6iPO7g4m6nU0/j1.g14ZLzDzArVtLSObmRE7J7zNYeRWena', 'urdad', NULL);
+(15, 'urdad@email.com', '$2y$10$jefVY.6iPO7g4m6nU0/j1.g14ZLzDzArVtLSObmRE7J7zNYeRWena', 'urdad', NULL),
+(16, 'lmao@email.com', '$2y$10$0hFRHDbWMjZikVoOFzQP..HPL2zo/TO2EQ94VaDIDsLLzQIrtD7RG', 'lmao', NULL);
 
 --
 -- Indexes for dumped tables
@@ -145,6 +157,7 @@ INSERT INTO `users` (`id`, `email`, `password`, `username`, `reserved`) VALUES
 --
 ALTER TABLE `accepted_trainers`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id_2` (`user_id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -154,14 +167,13 @@ ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`,`email`);
 
 --
--- Indexes for table `subscribe`
+-- Indexes for table `reservation`
 --
-ALTER TABLE `subscribe`
-  ADD PRIMARY KEY (`sub_id`),
-  ADD KEY `sub_id` (`sub_id`),
-  ADD KEY `sub_id_2` (`sub_id`,`trainer_id`,`user_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `trainer_id` (`trainer_id`);
+ALTER TABLE `reservation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`,`user_id`,`trainer_id`),
+  ADD KEY `trainer_id` (`trainer_id`),
+  ADD KEY `user_id` (`user_id`,`trainer_id`);
 
 --
 -- Indexes for table `trainer_applications`
@@ -186,7 +198,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accepted_trainers`
 --
 ALTER TABLE `accepted_trainers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `admins`
@@ -195,10 +207,10 @@ ALTER TABLE `admins`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `subscribe`
+-- AUTO_INCREMENT for table `reservation`
 --
-ALTER TABLE `subscribe`
-  MODIFY `sub_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `reservation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `trainer_applications`
@@ -210,7 +222,7 @@ ALTER TABLE `trainer_applications`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables
@@ -223,11 +235,11 @@ ALTER TABLE `accepted_trainers`
   ADD CONSTRAINT `accepted_trainers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `subscribe`
+-- Constraints for table `reservation`
 --
-ALTER TABLE `subscribe`
-  ADD CONSTRAINT `subscribe_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `subscribe_ibfk_2` FOREIGN KEY (`trainer_id`) REFERENCES `accepted_trainers` (`id`);
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`trainer_id`) REFERENCES `accepted_trainers` (`id`);
 
 --
 -- Constraints for table `trainer_applications`

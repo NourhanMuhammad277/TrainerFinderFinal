@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once(__DIR__ . '/../../Controllers/FinderController.php');
 include_once("../components/head.php");
 ?>
@@ -11,22 +12,19 @@ include_once("../components/head.php");
     <?php
 
     $trainers = FinderController::index();
-
-    function handleSubscribe(int $trainer_id): void
-    {
-        $currentUserId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-        if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['subscribe']) and $currentUserId != null) {
-            FinderController::subscribe(trainer_id: $trainer_id, user_id: $currentUserId);
-            $message = "Subscribed successfully";
-        } else {
-            $message = "Please login to subscribe";
-        }
+    $success1;
+   
+    $currentUserId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null;
+    if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['Subscribe']) and $currentUserId != null) {
+        $trainer_id = $_POST['trainer_id'];
+        $success1 = FinderController::subscribe(trainer_id: $trainer_id, user_id: $currentUserId);
+        $message = $success1 ? 'Successfully subcscribed' : 'Failed to subscribe';
+    } else {
+        $message = 'Please login to subscribe';
     }
 
     ?>
-    <?php if (isset($message)): ?>
-        <div class="alert"><?= htmlspecialchars($message) ?></div>
-    <?php endif; ?>
+   
     <?php if ($trainers): ?>
         <div>
             <ul>
@@ -61,19 +59,20 @@ include_once("../components/head.php");
 
 
                         <!-- this is so dumb this is why i wanted laravel u cant convince me this is good -->
-                        <input type="hidden" name="trainer_id" value="<?= $tr['user_id'] ?>" />
+                        <input type="hidden" name="trainer_id" value="<?= $tr['id'] ?>" />
 
                         <!--  $_SESSION['user_id'] -->
-                        <input type="submit" value="Subscribe" name="subscribe" />
+                        <input type="submit" value="Subscribe" name="Subscribe" />
                     </form>
 
                 <?php endforeach ?>
             </ul>
-
+            <?php echo $_SESSION['user_id']; ?>
         </div>
     <?php else : ?>
         <p>No trainers found.</p>
     <?php endif ?>
-
+    <?php include_once "../components/footer.php" ?>
 </body>
+
 </html>
